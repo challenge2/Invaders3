@@ -1,0 +1,62 @@
+﻿<Window x:Class="Invaders3.View.InvadersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodel="clr-namespace:Invaders3.ViewModel"
+        mc:Ignorable="d"
+        Title="InvadersWindow" Height="300" Width="400" KeyDown="KeyDownHandler" KeyUp="KeyUpHandler">
+
+    <Window.Resources>
+        <viewmodel:InvadersViewModel x:Key="viewModel"/>
+        <viewmodel:BooleanVisibilityConverter x:Key="visibilityConverter"/>
+    </Window.Resources>
+    <Grid DataContext="{StaticResource viewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Background="Black" >
+            <Canvas Background="BlueViolet" />
+        </Border>
+
+        <StackPanel HorizontalAlignment="Right" Margin="0,60,0,0">
+            <TextBlock Text="{Binding Score}" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+            <ListView Background="Black" ItemsSource="{Binding Lives}" 
+                      Width="Auto" Height="50" HorizontalAlignment="Right">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="C:\Users\user\source\repos\Invaders3\Invaders3\player.png"
+                                Height="15" Width="25"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+
+        <Border BorderBrush="Blue" BorderThickness="2" CornerRadius="10" Margin="5" Background="Black" 
+                Grid.Row="1" x:Name="playArea">
+            <ItemsControl 
+                    ItemsSource="{Binding Path=Sprites}" Margin="5">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Background="Black" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Border>
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Visibility="{Binding GameOver, Converter={StaticResource visibilityConverter}}">
+
+            <Button Content="Start a new game" Background="#FFB52525"
+                        Height="30" Click="StartButtonClick" Margin="135,50,153.286,60"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="1" Text="Paused" VerticalAlignment="Center" 
+                   FontFamily="Arial Narrow" FontSize="60"
+                   Foreground="Yellow" FontWeight="ExtraBold" FontStyle="Italic"
+                   Margin="120,0,0,60" 
+                   Visibility="{Binding Paused, Converter={StaticResource visibilityConverter}}"/>
+    </Grid>
+</Window>
